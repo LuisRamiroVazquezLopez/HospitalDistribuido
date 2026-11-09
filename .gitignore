@@ -1,0 +1,27 @@
+# Secretos — nunca al repo público
+.env
+*.env
+!.env.example
+
+# Datos de las bases (volúmenes locales)
+datos-mysql/
+datos-postgres/
+datos-mongo/
+datos-grafana/
+datos-prometheus/
+*.dump
+*.sql.gz
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
