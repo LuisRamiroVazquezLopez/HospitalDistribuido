@@ -1,6 +1,6 @@
 services:
   shard1-b:
-    image: mongo:7.0
+    image: mongo:8.0.38
     container_name: shard1-b
     ports:
       - "27202:27202"
@@ -17,7 +17,7 @@ services:
         chown 999:999 /tmp/keyfile
         exec docker-entrypoint.sh mongod --replSet rs-shard1 --port "27202" --bind_ip_all --shardsvr --keyFile /tmp/keyfile
   shard2-b:
-    image: mongo:7.0
+    image: mongo:8.0.38
     container_name: shard2-b
     ports:
       - "27302:27302"
@@ -34,7 +34,7 @@ services:
         chown 999:999 /tmp/keyfile
         exec docker-entrypoint.sh mongod --replSet rs-shard2 --port "27302" --bind_ip_all --shardsvr --keyFile /tmp/keyfile
   cfg2:
-    image: mongo:7.0
+    image: mongo:8.0.38
     container_name: cfg2
     ports:
       - "27102:27102"
@@ -52,7 +52,7 @@ services:
         exec docker-entrypoint.sh mongod --configsvr --replSet rs-config --port "27102" --bind_ip_all --keyFile /tmp/keyfile
 
   mongos2:
-    image: mongo:7.0
+    image: mongo:8.0.38
     container_name: mongos2
     ports:
       - "27018:27018"
