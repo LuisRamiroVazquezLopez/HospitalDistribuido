@@ -1,0 +1,72 @@
+services:
+  shard1-c:
+    image: mongo:7.0
+    container_name: shard1-c
+    ports:
+      - "27203:27203"
+    volumes:
+      - shard1-c-datos:/data/db
+      - ../mongo/keyfile:/etc/mongo/keyfile-origen:ro
+    command: 
+      - bash
+      - -c
+      - |
+        set -e
+        cp /etc/mongo/keyfile-origen /tmp/keyfile
+        chmod 400 /tmp/keyfile
+        chown 999:999 /tmp/keyfile
+        exec docker-entrypoint.sh mongod --replSet rs-shard1 --port "27203" --bind_ip_all --shardsvr --keyFile /tmp/keyfile
+  shard2-c:
+    image: mongo:7.0
+    container_name: shard2-c
+    ports:
+      - "27303:27303"
+    volumes:
+      - shard2-c-datos:/data/db
+      - ../mongo/keyfile:/etc/mongo/keyfile-origen:ro
+    command: 
+      - bash
+      - -c
+      - |
+        set -e
+        cp /etc/mongo/keyfile-origen /tmp/keyfile
+        chmod 400 /tmp/keyfile
+        chown 999:999 /tmp/keyfile
+        exec docker-entrypoint.sh mongod --replSet rs-shard2 --port "27303" --bind_ip_all --shardsvr --keyFile /tmp/keyfile
+  cfg3:
+    image: mongo:7.0
+    container_name: cfg3
+    ports:
+      - "27103:27103"
+    volumes:
+      - cfg3-datos:/data/configdb
+      - ../mongo/keyfile:/etc/mongo/keyfile-origen:ro
+    command: 
+      - bash
+      - -c
+      - |
+        set -e
+        cp /etc/mongo/keyfile-origen /tmp/keyfile
+        chmod 400 /tmp/keyfile
+        chown 999:999 /tmp/keyfile
+        exec docker-entrypoint.sh mongod --configsvr --replSet rs-config --port "27103" --bind_ip_all --keyFile /tmp/keyfile
+  mongos3:
+    image: mongo:7.0
+    container_name: mongos3
+    ports:
+      - "27019:27019"
+    volumes:
+      - ../mongo/keyfile:/etc/mongo/keyfile-origen:ro
+    command:
+      - bash
+      - -c
+      - |
+        set -e
+        cp /etc/mongo/keyfile-origen /tmp/keyfile
+        chmod 400 /tmp/keyfile
+        chown 999:999 /tmp/keyfile
+        exec docker-entrypoint.sh mongos --configdb rs-config/${PC1_IP}:27101,${PC2_IP}:27102,${PC3_IP}:27103 --port 27019 --bind_ip_all --keyFile /tmp/keyfile
+volumes:
+  shard1-c-datos:
+  shard2-c-datos:
+  cfg3-datos:

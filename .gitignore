@@ -25,3 +25,6 @@ desktop.ini
 
 # Logs
 *.log
+
+#Archivo de llave para validar el cluster de mongo
+infra/mongo/keyfile
